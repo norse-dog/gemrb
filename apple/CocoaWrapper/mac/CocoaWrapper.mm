@@ -123,8 +123,21 @@ using namespace GemRB;
 	// we configure this here so that when GemRB is launched though means such as Drag/Drop we dont show the config window
 
 	_showConfigWindow = YES; //still need to set this to YES in case an error occurs
-	[NSBundle loadNibNamed:@"GemRB" owner:self];
-
+    
+    if ([[NSBundle mainBundle] respondsToSelector:@selector(loadNibNamed:owner:topLevelObjects:)]) {
+        // We're running on Mountain Lion or higher
+        [[NSBundle mainBundle] loadNibNamed:@"GemRB"
+                                      owner:self
+                            topLevelObjects:nil];
+		[_configWindow retain];
+    } else {
+        // We're running on Lion
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        [NSBundle loadNibNamed:@"GemRB" owner:self];
+#pragma clang diagnostic pop
+    }
+    
 	if (core == NULL) {
 		[_configWindow makeKeyAndOrderFront:nil];
 	}
