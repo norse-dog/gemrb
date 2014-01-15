@@ -1516,7 +1516,10 @@ void SDLVideoDriver::SetSurfacePixel(SDL_Surface* surface, short x, short y, con
 			*pixels = (unsigned char)val;
 			break;
 		case 2:
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-align"
 			*(Uint16 *)pixels = (Uint16)val;
+#pragma clang diagnostic pop
 			break;
 		case 3:
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
@@ -1530,7 +1533,10 @@ void SDLVideoDriver::SetSurfacePixel(SDL_Surface* surface, short x, short y, con
 #endif
 			break;
 		case 4:
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-align"
 			*(Uint32 *)pixels = val;
+#pragma clang diagnostic pop
 			break;
 		default:
 			Log(ERROR, "SDLSurfaceSprite2D", "Working with unknown pixel format: %s", SDL_GetError());
@@ -1551,7 +1557,10 @@ void SDLVideoDriver::GetSurfacePixel(SDL_Surface* surface, short x, short y, Col
 	if (Bpp == 1) {
 		val = *pixels;
 	} else if (Bpp == 2) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-align"
 		val = *(Uint16 *)pixels;
+#pragma clang diagnostic pop
 	} else if (Bpp == 3) {
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
 		val = pixels[0] + ((unsigned int)pixels[1] << 8) + ((unsigned int)pixels[2] << 16);
@@ -1559,7 +1568,10 @@ void SDLVideoDriver::GetSurfacePixel(SDL_Surface* surface, short x, short y, Col
 		val = pixels[2] + ((unsigned int)pixels[1] << 8) + ((unsigned int)pixels[0] << 16);
 #endif
 	} else if (Bpp == 4) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-align"
 		val = *(Uint32 *)pixels;
+#pragma clang diagnostic pop
 	}
 
 	SDL_UnlockSurface( surface );
