@@ -368,6 +368,17 @@ Window* CHUImporter::GetWindow(unsigned int wid)
 				str->ReadResRef( InitResRef );
 				Font* fnt = core->GetFont( FontResRef );
 				Font* ini = core->GetFont( InitResRef );
+                if (!fnt || !ini) {
+                    Log(ERROR, "CHUImporter", "Font not found, falling back to default");
+                    if (!fnt)
+                        fnt = core->GetFont((unsigned int)0);
+                    if (!ini)
+                        ini = core->GetFont((unsigned int)0);
+                }
+                if (!fnt || !ini) {
+                    Log(ERROR, "CHUImporter", "Font not found, skipping control");
+                    break;
+                }
 				str->Read( &fore, 4 );
 				str->Read( &init, 4 );
 				str->Read( &back, 4 );
